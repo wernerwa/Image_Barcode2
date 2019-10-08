@@ -135,7 +135,6 @@ class Image_Barcode2_Driver_Code39 extends Image_Barcode2_Common implements Imag
     {
         $text     = $this->getBarcode();
         $writer   = $this->getWriter();
-        $fontsize = $this->getFontSize();
 
         // add start and stop * characters
         $final_text = '*' . $text . '*';
@@ -158,8 +157,14 @@ class Image_Barcode2_Driver_Code39 extends Image_Barcode2_Common implements Imag
         // Allocate black and white colors to the image
         $black = $writer->imagecolorallocate($img, 0, 0, 0);
         $white = $writer->imagecolorallocate($img, 255, 255, 255);
-        $font_height = $writer->imagefontheight($fontsize);
-        $font_width = $writer->imagefontwidth($fontsize);
+        $fontsize = null;
+        $font_height = 0;
+        $font_width = 0;
+        if ($this->getShowText()) {
+            $fontsize = $this->getFontSize();
+            $font_height = $writer->imagefontheight($fontsize);
+            $font_width = $writer->imagefontwidth($fontsize);
+        }
 
         // fill background with white color
         $writer->imagefill($img, 0, 0, $white);
